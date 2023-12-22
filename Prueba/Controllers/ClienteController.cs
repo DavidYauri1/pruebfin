@@ -1,0 +1,96 @@
+﻿using System.Security.Claims;
+using Lab14.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using NetCoreYouTube.Models;
+
+namespace NetCoreYouTube.Controllers
+{
+    [ApiController]
+    [Route("cliente")]
+    public class ClienteController : ControllerBase
+    {
+        [HttpGet]
+        [Route("listar")]
+        public dynamic listarCliente()
+        {
+            //Todo el codigo
+
+            List<Cliente> clientes = new List<Cliente>
+            {
+                new Cliente
+                {
+                    id = "1",
+                    correo = "google@gmail.com",
+                    edad = "19",
+                    nombre = "Bernardo Peña"
+                },
+                new Cliente
+                {
+                    id = "2",
+                    correo = "miguelgoogle@gmail.com",
+                    edad = "23",
+                    nombre = "Miguel Mantilla"
+                }
+            };
+
+            return clientes;
+        }
+
+        [HttpGet]
+        [Route("listarxid")]
+        public dynamic listarClientexid(int codigo)
+        {
+            //obtienes el cliente de la db
+
+            return new Cliente
+            {
+                id = codigo.ToString(),
+                correo = "google@gmail.com",
+                edad = "19",
+                nombre = "Bernardo Peña"
+            };
+        }
+
+        [HttpPost]
+        [Route("guardar")]
+        public dynamic guardarCliente(Cliente cliente)
+        {
+            //Guardar en la db y le asignas un id
+            cliente.id = "3";
+
+            return new
+            {
+                success = true,
+                message = "cliente registrado",
+                result = cliente
+            };
+        }
+
+        [HttpPost]
+        [Route("eliminar")]
+        public dynamic eliminarCliente(Cliente cliente)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity == null)
+            {
+                return new
+                {
+                    success = false,
+                    message = "Identidad no encASAontrada",
+                    result = (Usuario)null
+                };
+            }
+
+            return new
+            {
+                success = false,
+                message = "Identidad no encontrada",
+                result = identity
+            };
+
+
+
+        }
+    }
+}
